@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://smsmonitor.asiainfo.com" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://smsmonitor.asiainfo.com">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://smsmonitor.asiainfo.com" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:element name="report">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="messageID" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="mobileNumber" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="statusCode" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="timeStamp" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="reportResponse">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="notification">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="mobileNumber" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="channelID" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="content" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="timeStamp" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="notificationResponse">
+        <xsd:complexType />
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="notificationRequest">
+    <wsdl:part element="tns:notification" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="reportResponse">
+    <wsdl:part element="tns:reportResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="reportRequest">
+    <wsdl:part element="tns:report" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="notificationResponse">
+    <wsdl:part element="tns:notificationResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:portType name="SMSPortType">
+    <wsdl:operation name="report">
+      <wsdl:input message="tns:reportRequest" name="reportRequest" />
+      <wsdl:output message="tns:reportResponse" name="reportResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="notification">
+      <wsdl:input message="tns:notificationRequest" name="notificationRequest" />
+      <wsdl:output message="tns:notificationResponse" name="notificationResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SMSBinding" type="tns:SMSPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="report">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="reportRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="reportResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="notification">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="notificationRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="notificationResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SMS">
+    <wsdl:port binding="tns:SMSBinding" name="SMSPort">
+      <wsdlsoap:address location="http://smsmonitor.asiainfo.com" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

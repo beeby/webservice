@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>ChinaUnicomMessageServer</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>ChinaUnicomMessageServerServlet</servlet-name>
+		<servlet-class>
+			com.transfar.messageserver.chinaunicom.service.ChinaUnicomMessageServerContext</servlet-class>
+		<init-param>
+			<param-name>log4j</param-name>
+			<param-value>WEB-INF/log4j.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>spring</param-name>
+			<param-value>WEB-INF/spring/spring-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+
+	</servlet>
+	<listener>
+		<listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>cums.root</param-value>
+	</context-param>
+	
+    <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
+        <!-- <init-param> 
+        	<param-name>axis2.xml.path</param-name>
+        	<param-value>${cums.root}/WEB-INF/conf/axis2.xml</param-value> -->
+        <!--<param-name>axis2.xml.url</param-name>-->
+        <!--<param-value>http://localhost/myrepo/axis2.xml</param-value>-->
+        <!--<param-name>axis2.repository.path</param-name>-->
+        <!--<param-value>/WEB-INF</param-value>-->
+        <!--<param-name>axis2.repository.url</param-name>-->
+        <!--<param-value>http://localhost/myrepo</param-value>-->
+        <!-- </init-param> -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    
+    <!-- servlet>
+        <servlet-name>SOAPMonitorService</servlet-name>
+        <display-name>SOAPMonitorService</display-name>
+        <servlet-class>org.apache.axis2.soapmonitor.servlet.SOAPMonitorService</servlet-class>
+        <init-param>
+            <param-name>SOAPMonitorPort</param-name>
+            <param-value>5001</param-value>
+        </init-param>
+        <init-param>
+            <param-name>SOAPMonitorHostName</param-name>
+            <param-value>localhost</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet -->
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+    
+
+    <!-- servlet-mapping>
+        <servlet-name>SOAPMonitorService</servlet-name>
+        <url-pattern>/SOAPMonitor</url-pattern>
+    </servlet-mapping -->
+    
+    <mime-mapping>
+        <extension>inc</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+</web-app>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+ 	<!-- 
+ 		${tomcatHome} tomcat的根目录
+ 		${appHome}    当前应用的根目录
+ 	 -->
+	<bean id="propertyConfigurer" class="com.transfar.messageserver.utils.CommonPropertieConfigurer">
+		<property name="runtimeParamFile">
+		  <value>file:${cums.root}../../conf/server.conf</value>
+		</property>
+		
+		<property name="locations">
+			<list>
+				<value>file:${cums.root}WEB-INF/server.conf</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbcDriver}</value>
+		</property>
+		<property name="url">
+			<value>${jdbcUrl}</value>
+		</property>
+		<property name="username">
+			<value>${username}</value>
+		</property>
+		<property name="password">
+			<value>${password}</value>
+		</property>
+		<property name="maxActive">
+			<value>${maxActive}</value>
+		</property>
+		<property name="initialSize">
+			<value>${initialSize}</value>
+		</property>
+		<property name="maxWait">
+			<value>${maxWait}</value>
+		</property>
+		<property name="maxIdle">
+			<value>${maxIdle}</value>
+		</property>
+		<property name="minIdle">
+			<value>${minIdle}</value>
+		</property>
+		
+		<property name="logAbandoned">
+			<value>${logAbandoned}</value>
+		</property>
+		<property name="removeAbandoned">
+			<value>${removeAbandoned}</value>
+		</property>
+		<property name="removeAbandonedTimeout">
+			<value>${removeAbandonedTimeout}</value>
+		</property>
+		<property name="testOnBorrow">
+			<value>${testOnBorrow}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${validationQuery}</value>
+		</property>
+		
+	</bean>
+	
+	 <bean id="nativeJdbcExtractor"
+            class="org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor"
+            lazy-init="true" />
+	
+  	<bean id="jdbcTemplate" 
+		class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource">
+        	<ref bean="dataSource"/>
+        </property>
+        <property name="nativeJdbcExtractor">
+        	<ref bean="nativeJdbcExtractor"/>
+        </property>
+		
+    </bean>
+   
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="lobHandler" lazy-init="true" class="org.springframework.jdbc.support.lob.DefaultLobHandler"/>
+	<!-- 事物拦截器 -->
+
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor"
+		dependency-check="none">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+
+			<props>
+				<prop key="*">
+					PROPAGATION_REQUIRED,-Exception
+				</prop>
+				<prop key="createLog">
+					PROPAGATION_REQUIRES_NEW,-Exception
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+
+</beans>

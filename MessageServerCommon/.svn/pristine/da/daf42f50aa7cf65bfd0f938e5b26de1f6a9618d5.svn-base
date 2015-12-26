@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="D:/TomcatServers/apache-tomcat-6.0.32/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLib/spring.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLib/axis2-1.5.4/lib/axiom-api-1.2.10.jar"/>
+	<classpathentry kind="lib" path="D:/JavaLib/axis2-1.5.4/lib/axiom-dom-1.2.10.jar"/>
+	<classpathentry kind="lib" path="D:/TomcatServers/MessageServer/lib/bcprov-jdk16-146.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

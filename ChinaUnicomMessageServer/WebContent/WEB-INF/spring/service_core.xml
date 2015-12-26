@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="applicationContext" 
+      class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder" />
+
+
+	<!-- 用户service -->
+	<bean id="AsisinfoServiceClient"
+		class="com.transfar.messageserver.chinaunicom.service.AsisinfoServiceClient">
+		<property name="targetEPR">
+			<value>${chinaunicom.webclient.url}</value>
+		</property>
+		<property name="nameSpace">
+			<value>${chinaunicom.webclient.namespace}</value>
+		</property>
+		<property name="nameSpaceShort">
+			<value>${chinaunicom.webclient.namespacePrefix}</value>
+		</property>
+		<property name="spId">
+			<value>${chinaunicom.webclient.loginName}</value>
+		</property>
+		<property name="spPassword">
+			<value>${chinaunicom.webclient.loginPassword}</value>
+		</property>
+	</bean>
+
+	<bean id="ChinaUnicomMessageService"
+		class="com.transfar.messageserver.chinaunicom.service.ChinaUnicomMessageService">
+		<property name="serviceDao">
+			<ref bean="chinaUnicomMessageDao" />
+		</property>
+	</bean>
+
+	<bean id="ChinaUnicomWebService"
+		class="com.transfar.messageserver.chinaunicom.service.ChinaUnicomWebService">
+		<property name="service">
+			<ref bean="ChinaUnicomMessageService" />
+		</property>
+		<property name="serviceCode">
+			<value>${chinaunicom.serviceCode}</value>
+		</property>
+	</bean>
+	
+	<bean id="SGIPMessageSequence"
+		class="com.transfar.messageserver.chinaunicom.scheme.SGIPMessageSequence">
+		<property name="areaCode">
+			<value>${chinaunicom.areaCode}</value>
+		</property>
+		<property name="corpId">
+			<value>${chinaunicom.corpId}</value>
+		</property>
+	</bean>
+	
+	<bean id="ChinaUnicomMessageServer"
+		class="com.transfar.messageserver.chinaunicom.service.ChinaUnicomMessageServer">
+		<property name="service">
+			<ref bean="ChinaUnicomMessageService" />
+		</property>
+		<property name="webClient">
+			<ref bean="AsisinfoServiceClient" />
+		</property>
+		<property name="windowSize">
+			<value>${chinaunicom.webclient.windowSize}</value>
+		</property>
+	</bean>
+
+</beans>
+	
+	
+

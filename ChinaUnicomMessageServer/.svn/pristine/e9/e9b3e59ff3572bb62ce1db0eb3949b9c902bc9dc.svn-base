@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- Begin 取得诊疗卡定时器 -->
+	<bean id="setPatiendCard1" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!-- 取得挂号信息定时器 -->
+	<bean id="getOrderDetail1" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!-- 取得第二天以后挂号信息定时器 -->
+	<bean id="getOrderDetail2" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!-- 根据取得挂号信息定时器 -->
+	<bean id="getOrderDetail3" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!-- 返回挂号信息的正确性-->
+	<bean id="patientOrderStatusList1" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!-- 更新号别表的信息-->
+	<bean id="accreditData1" class="com.transfar.vsms.hospitalserviceclient.timer.XiangyaTimer">
+	</bean>
+	
+	<!--取诊疗卡的定时器-->
+	<bean id="methodInvokingPatientCard"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="setPatiendCard1" />
+		</property>
+		<property name="targetMethod">
+			<value>setPatiendCard</value>
+		</property>
+	</bean>
+	
+	<!-- 取得挂号信息定时器 -->
+	<bean id="methodInvokingGetOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="getOrderDetail1" />
+		</property>
+		<property name="targetMethod">
+			<value>getOrderDetail</value>
+		</property>
+	</bean>
+	
+	<!-- 取得第二天挂号信息定时器 -->
+	<bean id="methodInvokingGetOrderDetail2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="getOrderDetail2" />
+		</property>
+		<property name="targetMethod">
+			<value>getOrderDetailNextDay</value>
+		</property>
+	</bean>
+	
+	<bean id="methodInvokingGetOrderDetail3"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="getOrderDetail3" />
+		</property>
+		<property name="targetMethod">
+			<value>getOrderDetailByTimes</value>
+		</property>
+	</bean>
+	
+	<!-- 返回挂号信息的正确性-->
+	<bean id="methodInvokingPatientOrderStatusList"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="patientOrderStatusList1" />
+		</property>
+		<property name="targetMethod">
+			<value>returnOrderMsg</value>
+		</property>
+	</bean>
+	
+	<!-- 更新号别表的信息-->
+	<bean id="methodInvokingAccreditData"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="accreditData1" />
+		</property>
+		<property name="targetMethod">
+			<value>getAccreditData</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggePatientCard" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingPatientCard" />
+		</property>
+		<property name="cronExpression">
+			<value>30 0 6,12,19 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggeGetOrderDetail" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingGetOrderDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>30 5 06 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggeGetOrderDetail2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingGetOrderDetail2" />
+		</property>
+		<property name="cronExpression">
+			<value>30 5 12,18 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggeGetOrderDetail3" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingGetOrderDetail3" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/2 * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggePatientOrderStatusList" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingPatientOrderStatusList" />
+		</property>
+		<property name="cronExpression">
+			<value>30 10 06 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="cronTriggeAccreditData" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="methodInvokingAccreditData" />
+		</property>
+		<property name="cronExpression">
+			<value>30 20 06,12,19 * * ?</value>
+		</property>
+	</bean>
+	<!--End-->
+	
+	<bean id="schedFact"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- 取诊疗卡的定时器 -->
+				<ref local="cronTriggePatientCard" />
+				<ref local="cronTriggeGetOrderDetail" />
+				<ref local="cronTriggeGetOrderDetail2" />
+				<ref local="cronTriggeGetOrderDetail3" />
+				<ref local="cronTriggePatientOrderStatusList" />
+				<ref local="cronTriggeAccreditData" />
+			</list>
+		</property>
+	</bean>
+</beans>
